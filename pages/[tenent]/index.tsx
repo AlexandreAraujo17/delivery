@@ -1,9 +1,20 @@
+import { GetServerSideProps } from 'next'
+import { useEffect } from 'react'
 import { Banner } from '../../components/Banner'
 import { ProductItem } from '../../components/ProductItem'
 import { SearchInput } from '../../components/SearchInput'
+import { useAppContext } from '../../contexts/AppContext'
 import { useApi } from '../../libs/UseApi'
 import styles from '../../styles/Home.module.css'
-const Home = () => {
+import { Tenent } from '../../types/Tenent'
+
+const Home = ( data: Props) => {
+
+	const { tenent, setTenent } = useAppContext() 
+
+	useEffect(() => {
+		setTenent(data.tenent)
+	}, [])
 
 	const handleSearch = (searchValue: string) => {
 
@@ -23,55 +34,48 @@ const Home = () => {
 					</div>
 					<div className={styles.headerTopRight}>
 						<div className={styles.menuButton}>
-							<div className={styles.menuButtonLine}></div>
-							<div className={styles.menuButtonLine}></div>
-							<div className={styles.menuButtonLine}></div>
+							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
+							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
+							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
 						</div>
 					</div>
 				</div>
 				<div className={styles.headerBottom}>
-					<SearchInput
-						mainColor='#FB9400'
-						onSearch={handleSearch}
-					/>
+					<SearchInput onSearch={handleSearch} />
 				</div>
 			</header>
 
 			<Banner />
 
 			<div className={styles.grid}>
-				<ProductItem 
+				<ProductItem
 					data={{
 						id: 1,
 						image: '/tmp/burger.png',
 						categoryName: 'Tradicional',
 						name: 'Texas Burger',
 						price: 'R$ 25,50'
-					 }}
-					mainColor='#FB9400'
-					secondColor='#FFF9F2'
+					}}
 				/>
-				<ProductItem 
+				
+				<ProductItem
 					data={{
-						id: 2,
+						id: 1,
 						image: '/tmp/burger.png',
-						categoryName: 'Tradicional',
-						name: 'Texas Burger',
-						price: 'R$ 25,50'
-					 }}
-					mainColor='#FB9400'
-					secondColor='#FFF9F2'
+						categoryName: 'Cheddar',
+						name: 'Cheddar Burger',
+						price: 'R$ 30,50'
+					}}
 				/>
-				<ProductItem 
+				
+				<ProductItem
 					data={{
-						id: 3,
+						id: 1,
 						image: '/tmp/burger.png',
-						categoryName: 'Tradicional',
-						name: 'Texas Burger',
-						price: 'R$ 25,50'
-					 }}
-					mainColor='#FB9400'
-					secondColor='#FFF9F2'
+						categoryName: 'Smash',
+						name: 'Smash Burger',
+						price: 'R$ 27,50'
+					}}
 				/>
 			</div>
 		</div>
@@ -79,3 +83,26 @@ const Home = () => {
 }
 
 export default Home
+
+type Props = {
+	tenent: Tenent
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const tenentSlug = context.query.tenent
+	const api = useApi();
+	
+	const tenent = api.getTenent(tenentSlug as string)
+
+	console.log(tenent);
+	
+	if(!tenent){
+		return { redirect: { destination: '/', permanent: false } }
+	}
+
+	return {
+		props: {
+			tenent
+		}
+	}
+}
