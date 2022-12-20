@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useAppContext } from '../../contexts/AppContext'
+import { useAppContext } from '../../contexts/app'
 import { useFormatter } from '../../libs/useFormatter'
 import { Product } from '../../types/Product'
 import styles from './styles.module.css'
@@ -10,7 +10,7 @@ type Props = {
 
 export const ProductItem = ({ data }: Props) => {
 
-    const {tenent} = useAppContext();
+	const { tenent } = useAppContext()
     const formatter = useFormatter();
 
     return (

@@ -41,7 +41,7 @@ const Product = (data: Props) => {
             <div className={styles.headerArea}>
                 <Header 
                     color={data.tenent.mainColor} 
-                    backHref={`${data.tenent.slug}`} 
+                    backHref={`/${data.tenent.slug}`} 
                     title={'Produto'}
                     invert
                 />
@@ -97,8 +97,9 @@ type Props = {
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const {tenent: tenentSlug, id} = context.query
 	const api = useApi(tenentSlug as string);
+    
 
-	const tenent = await await api.getTenent()
+	const tenent = await api.getTenent()
 	const product = await api.getProduct(id as string);
 
 	if (!tenent) {

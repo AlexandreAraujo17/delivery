@@ -2,6 +2,8 @@ import { createContext, useReducer } from "react";
 import { reducer } from "./reducer";
 import { ContextType, DataType, ProviderType } from "./types";
 
+export { useAppContext } from './hook'
+
 const initialState: DataType = {
     tenent: null
 }

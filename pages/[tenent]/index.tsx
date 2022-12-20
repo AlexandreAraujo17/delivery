@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Banner } from '../../components/Banner'
 import { ProductItem } from '../../components/ProductItem'
 import { SearchInput } from '../../components/SearchInput'
-import { useAppContext } from '../../contexts/AppContext'
+import { useAppContext } from '../../contexts/app'
 import { useApi } from '../../libs/UseApi'
 import styles from '../../styles/Home.module.css'
 import { Product } from '../../types/Product'
@@ -75,7 +75,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	const tenent = await await api.getTenent()
 	const products = await api.getAllProducts();
 
-	console.log(tenent);
 
 	if (!tenent) {
 		return { redirect: { destination: '/', permanent: false } }
