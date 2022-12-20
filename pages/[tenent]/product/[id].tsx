@@ -1,10 +1,11 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Banner } from '../../../components/Banner'
 import { Button } from '../../../components/Button'
 import { Header } from '../../../components/Header'
 import { ProductItem } from '../../../components/ProductItem'
+import { Quantity } from '../../../components/Quantity'
 import { SearchInput } from '../../../components/SearchInput'
 import { useAppContext } from '../../../contexts/AppContext'
 import { useApi } from '../../../libs/UseApi'
@@ -17,6 +18,7 @@ const Product = (data: Props) => {
 
 	const { tenent, setTenent } = useAppContext()
     const formatter = useFormatter()
+    const [qtCount, setQtCount] = useState(0)
 
 	useEffect(() => {
 		setTenent(data.tenent)
@@ -24,6 +26,10 @@ const Product = (data: Props) => {
 
     const handleAddToCart = () => {
         
+    }
+
+    const handleUpdateQt = (newCount: number) => {
+        setQtCount(newCount)
     }
 
 	return (
@@ -55,7 +61,15 @@ const Product = (data: Props) => {
 
             <div className={styles.qtText}>Quantidade</div>
             <div className={styles.area}>
-                <div className={styles.areaLeft}>...</div>
+                <div className={styles.areaLeft}>
+                    <Quantity
+                        color={data.tenent.mainColor}
+                        count={qtCount}
+                        onUpdateCount={handleUpdateQt}
+                        min={1}
+                        
+                    />
+                </div>
                 <div 
                     className={styles.areaRight}
                     style={{color: data.tenent.mainColor}}
