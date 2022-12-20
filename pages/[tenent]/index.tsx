@@ -90,9 +90,9 @@ type Props = {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const tenentSlug = context.query.tenent
-	const api = useApi();
+	const api = useApi(tenentSlug as string);
 	
-	const tenent = api.getTenent(tenentSlug as string)
+	const tenent = api.getTenent()
 
 	console.log(tenent);
 	

@@ -1,9 +1,19 @@
+import { Product } from "../types/Product"
 import { Tenent } from "../types/Tenent"
 
-export const useApi = () => ({
+const TEMPORARYonePRODUCT: Product = {
+    id: 1,
+    image: '/tmp/burger.png',
+    categoryName: 'Smash',
+    name: 'Smash Burger',
+    price: 25.50,
+    description: '2 Blends de carne de 150g, Queijo Cheddar, Bacon Caramelizado, Salada, Molho da casa, Pão brioche artesanal'
+}
 
-    getTenent: (tenentSlug: string ): boolean | Tenent => {
-        switch(tenentSlug){
+export const useApi = (tenentSlug: string) => ({
+
+    getTenent: (): boolean | Tenent => {
+        switch (tenentSlug) {
             case 'burguer':
                 return {
                     slug: 'burguer',
@@ -11,7 +21,7 @@ export const useApi = () => ({
                     mainColor: '#FF0000',
                     secondColor: '#00FF00'
                 }
-            break
+                break
 
             case 'pizza':
                 return {
@@ -20,11 +30,25 @@ export const useApi = () => ({
                     mainColor: '#0000FF',
                     secondColor: '#FF0000'
                 }
-            break
-            
+                break
+
             default: return false
         }
 
+    },
+
+    getAllProducts: () => {
+        let products = [];
+
+        for(let i = 0; i < 10; i++){
+            products.push(TEMPORARYonePRODUCT)
+        }
+
+        return products
+    },
+
+    getProduct: (id: string) => {
+        return TEMPORARYonePRODUCT;
     }
 
 })
