@@ -111,7 +111,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 	const api = useApi(tenentSlug as string);
 
-	const tenent = api.getTenent()
+	const tenent = await api.getTenent()
 
 	if (!tenent) {
 		return { redirect: { destination: '/', permanent: false } }

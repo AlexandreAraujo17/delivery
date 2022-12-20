@@ -1,16 +1,18 @@
 import { GetServerSideProps } from 'next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Banner } from '../../components/Banner'
 import { ProductItem } from '../../components/ProductItem'
 import { SearchInput } from '../../components/SearchInput'
 import { useAppContext } from '../../contexts/AppContext'
 import { useApi } from '../../libs/UseApi'
 import styles from '../../styles/Home.module.css'
+import { Product } from '../../types/Product'
 import { Tenent } from '../../types/Tenent'
 
-const Home = ( data: Props) => {
+const Home = (data: Props) => {
 
-	const { tenent, setTenent } = useAppContext() 
+	const { tenent, setTenent } = useAppContext()
+	const [products, setProducts] = useState<Product[]>(data.products)
 
 	useEffect(() => {
 		setTenent(data.tenent)
@@ -34,9 +36,9 @@ const Home = ( data: Props) => {
 					</div>
 					<div className={styles.headerTopRight}>
 						<div className={styles.menuButton}>
-							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
-							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
-							<div className={styles.menuButtonLine} style={{backgroundColor: tenent?.mainColor}}></div>
+							<div className={styles.menuButtonLine} style={{ backgroundColor: tenent?.mainColor }}></div>
+							<div className={styles.menuButtonLine} style={{ backgroundColor: tenent?.mainColor }}></div>
+							<div className={styles.menuButtonLine} style={{ backgroundColor: tenent?.mainColor }}></div>
 						</div>
 					</div>
 				</div>
@@ -48,35 +50,12 @@ const Home = ( data: Props) => {
 			<Banner />
 
 			<div className={styles.grid}>
-				<ProductItem
-					data={{
-						id: 1,
-						image: '/tmp/burger.png',
-						categoryName: 'Tradicional',
-						name: 'Texas Burger',
-						price: 'R$ 25,50'
-					}}
-				/>
-				
-				<ProductItem
-					data={{
-						id: 1,
-						image: '/tmp/burger.png',
-						categoryName: 'Cheddar',
-						name: 'Cheddar Burger',
-						price: 'R$ 30,50'
-					}}
-				/>
-				
-				<ProductItem
-					data={{
-						id: 1,
-						image: '/tmp/burger.png',
-						categoryName: 'Smash',
-						name: 'Smash Burger',
-						price: 'R$ 27,50'
-					}}
-				/>
+				{products.map((item, index) => (
+					<ProductItem
+						key={index}
+						data={item}
+					/>
+				))}
 			</div>
 		</div>
 	)
@@ -85,24 +64,27 @@ const Home = ( data: Props) => {
 export default Home
 
 type Props = {
-	tenent: Tenent
+	tenent: Tenent,
+	products: Product[]
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const tenentSlug = context.query.tenent
 	const api = useApi(tenentSlug as string);
-	
-	const tenent = api.getTenent()
+
+	const tenent = await await api.getTenent()
+	const products = await api.getAllProducts();
 
 	console.log(tenent);
-	
-	if(!tenent){
+
+	if (!tenent) {
 		return { redirect: { destination: '/', permanent: false } }
 	}
 
 	return {
 		props: {
-			tenent
+			tenent,
+			products
 		}
 	}
 }

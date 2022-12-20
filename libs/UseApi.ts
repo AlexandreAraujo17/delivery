@@ -12,7 +12,7 @@ const TEMPORARYonePRODUCT: Product = {
 
 export const useApi = (tenentSlug: string) => ({
 
-    getTenent: (): boolean | Tenent => {
+    getTenent: () => {
         switch (tenentSlug) {
             case 'burguer':
                 return {
