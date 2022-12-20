@@ -69,7 +69,7 @@ type Props = {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-	const tenentSlug = context.query.tenent
+	const {tenent: tenentSlug} = context.query
 	const api = useApi(tenentSlug as string);
 
 	const tenent = await await api.getTenent()
